@@ -24,8 +24,12 @@ class DatabaseSeeder extends Seeder
         if (!User::where('email', 'admin@gestion_panne.cm')->exists())
         {
             $superAdmin = User::create([
-                'name' => 'Admin',
+                'first_name' => 'Emmanuel',
+                'last_name' => 'Bilong',
                 'email' => 'admin@gestion-panne.cm',
+                'phone' => '+5856985655',
+
+                'departement' => 'IT',
                 'password' => Hash::make('admin'),
                 'created_at' => now(),
                 'updated_at' => now(),

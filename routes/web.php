@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -19,12 +20,11 @@ Route::get('/admin', [\App\Http\Controllers\Admin\AdminController::class, 'index
 Route::get('/admin/create', [\App\Http\Controllers\Admin\AdminController::class, 'create']);
 
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [AuthenticatedSessionController::class, 'create'])
+    ->name('login');
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    return view('admin.dashboard.admin');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {

@@ -16,7 +16,7 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
-        return view('profile.edit', [
+        return view('admin.profile', [
             'user' => $request->user(),
         ]);
     }
@@ -26,14 +26,43 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        // Valider et remplir les autres champs
+        $user = $request->user();
+
+        $user->fill($request->validated());
+
+        // Si un nouvel email est fourni, réinitialiser la vérification
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
         }
 
-        $request->user()->save();
+        // Gestion de l'image de profil
+        if ($request->hasFile('picture')) {
+            // Supprimer l'ancienne image si elle existe
+            if ($user->picture) {
+                $oldPicturePath = 'public/' . $user->picture;
+                if (\Storage::exists($oldPicturePath)) {
+                    \Storage::delete($oldPicturePath);
+                }
+            }
 
+            // Récupérer l'extension du fichier
+            $extension = $request->file('picture')->getClientOriginalExtension();
+
+            // Créer un nom de fichier lisible
+            $fileName = strtolower(str_replace(' ', '_', $user->first_name . '_' . $user->last_name)) . '_' . time() . '.' . $extension;
+
+            // Stocker la nouvelle image avec le nom lisible
+            $path = $request->file('picture')->storeAs('profile_pictures', $fileName, 'public');
+
+            // Sauvegarder le chemin dans la base de données
+            $user->picture = $path;
+        }
+
+        // Sauvegarder les modifications de l'utilisateur
+        $user->save();
+//        dd($user);
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
 

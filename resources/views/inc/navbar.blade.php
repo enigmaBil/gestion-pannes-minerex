@@ -134,18 +134,22 @@
 
         <li class="nav-item dropdown">
             <a class="nav-link image" data-toggle="dropdown" href="#">
-                Bienvenue Admin <img src="{{asset('backend/dist/img/user2-160x160.jpg')}}" class="img-circle elevation-2 mt-n1 mx-1" alt="User Image" style="height: 35px">
+                Bienvenue {{Auth::user()->first_name}} <img src="{{ Auth::user()->picture ? asset('storage/' . Auth::user()->picture) : asset('backend/dist/img/profil.png') }}" class="img-circle elevation-2 mt-n1 mx-1" alt="User Image" style="height: 35px">
             </a>
             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
 {{--                <span class="dropdown-item dropdown-header">15 Notifications</span>--}}
                 <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item">
+                <a href="{{route('profile.edit')}}" class="dropdown-item">
                     <i class="fas fa-user mr-2"></i> Profile
                 </a>
                 <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item">
-                    <i class="fas fa-door-closed mr-2"></i> Deconnexion
-                </a>
+                <form action="{{route('logout')}}" method="POST">
+                    @csrf
+                    <button type="submit" class="dropdown-item"  style="background: none; border: none; color: inherit; cursor: pointer;">
+                        <i class="fas fa-door-closed mr-2"></i> Deconnexion
+                    </button>
+                </form>
+
             </div>
         </li>
     </ul>
