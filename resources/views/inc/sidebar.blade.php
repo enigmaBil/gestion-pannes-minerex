@@ -52,13 +52,13 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="./index.html" class="nav-link active">
+                            <a href="{{ route('panne.create') }}" class="nav-link active">
                                 <i class="fa fa-bug nav-icon"></i>
                                 <p>Signaler Une Panne</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="./index2.html" class="nav-link">
+                            <a href="{{ route('panne.list') }}" class="nav-link">
                                 <i class="fa fa-list nav-icon"></i>
                                 <p>Consulter Les Pannes</p>
                             </a>
