@@ -46,7 +46,7 @@
     <!-- /.navbar -->
 
     <!-- Main Sidebar Container -->
-    @include('inc.sidebar')
+    @include('inc.sidebar') 
 
     <!-- Content Wrapper. Contains page content -->
     @yield('content')

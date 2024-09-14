@@ -13,5 +13,6 @@ class VerifyCsrfToken extends Middleware
      */
     protected $except = [
         //
+        'panne/*', // Désactiver CSRF pour toutes les routes avec le préfixe /panne
     ];
 }

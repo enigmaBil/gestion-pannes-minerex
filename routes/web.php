@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\PanneController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -45,6 +46,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+//route for manage pannes
+Route::prefix('panne')->group(function () {
+    //create test user
+    // Route::post('/user', [PanneController::class, 'createUser'])->name('panne.user');
+    Route::get('/create', [PanneController::class, 'index'])->name('panne.create');
+    Route::post('/create', [PanneController::class, 'createPanne'])->name('panne.store');
+    Route::get('/list', [PanneController::class, 'listview'])->name('panne.list');
 });
 
 require __DIR__.'/auth.php';
