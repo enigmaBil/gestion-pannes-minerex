@@ -15,9 +15,23 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route pour la partie administration
-Route::get('/admin', [\App\Http\Controllers\Admin\AdminController::class, 'index']);
-Route::get('/admin/create', [\App\Http\Controllers\Admin\AdminController::class, 'create']);
+// Routes pour la partie administration
+Route::middleware(['auth', 'roles:Admin,Lead_Technician,Technician'])->group(function (){
+    Route::get('/admin/index', [\App\Http\Controllers\Admin\AdminController::class, 'index'])->name('admin.dashboard');
+
+});
+
+//Routes pour la partie employe
+Route::middleware(['auth', 'roles:Employee'])->group(function (){
+    Route::get('/employee/index', [\App\Http\Controllers\Employee\EmployeeController::class, 'index'])->name('`employee.dashboard`');
+    Route::get('/employee/panne/index', [\App\Http\Controllers\Employee\EmployeeController::class, 'getAllPannes'])->name('panne.index');
+    Route::get('/employee/panne/create', [\App\Http\Controllers\Employee\EmployeeController::class, 'create'])->name('panne.create');
+    Route::post('/employee/panne/store', [\App\Http\Controllers\Employee\EmployeeController::class, 'store'])->name('panne.store');
+    Route::get('/employee/panne/show/{id}', [\App\Http\Controllers\Employee\EmployeeController::class, 'show'])->name('panne.show');
+    Route::get('/employee/panne/edit/{id}', [\App\Http\Controllers\Employee\EmployeeController::class, 'edit'])->name('panne.edit');
+    Route::patch('/employee/panne/{id}', [\App\Http\Controllers\Employee\EmployeeController::class, 'update'])->name('panne.update');
+
+});
 
 
 Route::get('/', [AuthenticatedSessionController::class, 'create'])

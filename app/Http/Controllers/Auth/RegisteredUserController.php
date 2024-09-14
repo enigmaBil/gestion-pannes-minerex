@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Role;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
@@ -46,11 +47,22 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        
+        // Associe le rôle "Employee" à tous les utilisateurs par defaut
+        $employeeRole = Role::where('name', 'Employee')->first();
+        if ($employeeRole){
+            $user->roles()->attach($employeeRole->id);
+        }else{
+            // Gérer l'absence du rôle "Employee"
+            throw new Exception('Le rôle Employee est introuvable.');
+        }
 
         event(new Registered($user));
 
         Auth::login($user);
+
+        if ($user->hasRole('Employee')){
+            return redirect()->route('employee.dashboard');
+        }
 
         return redirect(RouteServiceProvider::HOME);
     }
