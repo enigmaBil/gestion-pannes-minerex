@@ -1,9 +1,4 @@
 @extends('layouts.admin')
-@section('css')
-    <link rel="stylesheet" href=".{{ asset('backend/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('backend/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('backend/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
-@endsection
 @section('content')
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
@@ -15,7 +10,7 @@
                     </div><!-- /.col -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="#">Accueil</a></li>
+                            <li class="breadcrumb-item"><a class="text-success" href="{{route('dashboard')}}">Accueil</a></li>
                             <li class="breadcrumb-item active">Liste des pannes</li>
                         </ol>
                     </div><!-- /.col -->
@@ -28,6 +23,13 @@
         <section class="content">
             <div class="container-fluid">
                 <div class="row">
+                    <div class="col-md-12 py-3">
+                        <a href="{{route('create.panne')}}" class="btn btn-success bg-gradient-success">
+                            <i class="fas fa-plus-square"></i> Signaler une panne
+                        </a>
+                    </div>
+                </div>
+                <div class="row">
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
@@ -39,30 +41,50 @@
                                     <thead>
                                         <tr>
                                             <th>Utilisateur</th>
-                                            <th>Name</th>
+                                            <th>Titre</th>
                                             <th>Description</th>
                                             <th>Type</th>
-                                            <th>Crée le</th>
-                                            <th>Resolut le</th>
+                                            <th>Date de signalisation</th>
+                                            <th>Date de resolution</th>
                                             <th>Status</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach ($pannes as $panne)
                                             <tr>
                                                 <td>{{ $panne->user->last_name }} {{ $panne->user->first_name }} </td>
-                                                <td>{{ $panne->name }}</td>
-                                                <td>{{ $panne->description }}</td>
+                                                <td>{{ Str::limit($panne->name, 10, ' ...') }}</td>
+                                                <td>{{ Str::limit($panne->description, 20, ' ...') }}</td>
                                                 <td>{{ $panne->type }}</td>
                                                 <td>{{ $panne->reporting_date }}</td>
-                                                <td>{{ $panne->resolution_date ? $panne->resolution_date : 'Non résolue' }}
+                                                <td>
+                                                    @if($panne->resolution_date !== null)
+                                                        {{ $panne->resolution_date}}
+                                                    @else
+                                                        <span class="badge badge-danger">Non résolue</span>
+                                                    @endif
                                                 </td>
-                                                <td
-                                                    style="color: white; background-color:
-                                                    @if ($panne->status == 'en attente') orange
-                                                    @elseif($panne->status == 'en cours') blue
-                                                    @elseif($panne->status == 'résolue') green @endif">
-                                                    {{ $panne->status }}
+                                                <td>
+                                                    @if ($panne->status == 'en attente')
+                                                        <span class="badge badge-warning text-white">{{ $panne->status }}</span>
+                                                    @elseif($panne->status == 'en cours')
+                                                        <span class="badge badge-info">{{ $panne->status }}</span>
+                                                    @elseif($panne->status == 'résolue')
+                                                        <span class="badge badge-success">{{ $panne->status }}</span>
+                                                    @endif
+
+                                                </td>
+                                                <td>
+                                                    <a class="text-muted " href="">
+                                                        <i class="fas fa-pen fa-1x"></i>
+                                                    </a>
+                                                    <a class="text-muted mx-1" href="">
+                                                        <i class="fas fa-eye fa-1x"></i>
+                                                    </a>
+                                                    <a class="text-danger" href="">
+                                                        <i class="fas fa-trash fa-1x"></i>
+                                                    </a>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -94,19 +116,6 @@
     </div>
 @endsection
 @section('js')
-    <script src="{{ asset('backend/plugins/datatables/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('backend/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('backend/plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
-    <script src="{{ asset('backend/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('backend/plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
-    <script src="{{ asset('backend/plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
-    {{-- <script src="{{asset('backend/plugins/jszip/jszip.min.js')}}"></script>
-    <script src="{{asset('backend/plugins/pdfmake/pdfmake.min.js')}}"></script>
-    <script src="{{asset('backend/plugins/pdfmake/vfs_fonts.js')}}"></script>
-    <script src="{{asset('backend/plugins/datatables-buttons/js/buttons.html5.min.js')}}"></script>
-    <script src="{{asset('backend/plugins/datatables-buttons/js/buttons.print.min.js')}}"></script>
-    <script src="{{asset('backend/plugins/datatables-buttons/js/buttons.colVis.min.js')}}"></script> --}}
-    {{-- <script src="{{asset('backend/dist/js/demo.js')}}"></script> --}}
     <!-- Page specific script -->
     <script>
         $(function() {

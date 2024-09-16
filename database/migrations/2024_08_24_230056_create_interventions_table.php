@@ -27,6 +27,10 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::table('interventions', function (Blueprint $table) {
+            $table->dropForeign(['panne_id']); // Supprime la clé étrangère pour 'panne_id'
+            $table->dropForeign(['technician_id']); // Supprime la clé étrangère pour 'technician_id'
+        });
         Schema::dropIfExists('interventions');
     }
 };

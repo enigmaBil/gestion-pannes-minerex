@@ -49,7 +49,7 @@
 
                                     <ul class="list-group list-group-unbordered mb-3">
                                         <li class="list-group-item">
-                                            <b>Direction</b> <span class="float-right">{{Auth::user()->departement}}</span>
+                                            <b>Direction</b> <span class="float-right">{{Auth::user()->departement?Auth::user()->departement:'Non definie'}}</span>
                                         </li>
                                         <li class="list-group-item">
                                             <b>Telephone</b> <span class="float-right">{{Auth::user()->phone}}</span>

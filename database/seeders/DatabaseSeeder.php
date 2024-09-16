@@ -27,7 +27,7 @@ class DatabaseSeeder extends Seeder
                 'first_name' => 'Emmanuel',
                 'last_name' => 'Bilong',
                 'email' => 'admin@gestion-panne.cm',
-                'phone' => '+5856985655',
+                'phone' => '856985655',
 
                 'departement' => 'IT',
                 'password' => Hash::make('admin'),

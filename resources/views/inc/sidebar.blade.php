@@ -52,17 +52,18 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ route('panne.create') }}" class="nav-link active">
-                                <i class="fa fa-bug nav-icon"></i>
-                                <p>Signaler Une Panne</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('panne.list') }}" class="nav-link">
+                            <a href="{{ route('list.panne') }}" class="nav-link active">
                                 <i class="fa fa-list nav-icon"></i>
                                 <p>Consulter Les Pannes</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{ route('create.panne') }}" class="nav-link ">
+                                <i class="fa fa-bug nav-icon"></i>
+                                <p>Signaler Une Panne</p>
+                            </a>
+                        </li>
+
                     </ul>
                 </li>
                 <li class="nav-item">
@@ -89,7 +90,7 @@
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a href="pages/widgets.html" class="nav-link">
+                    <a href="{{route('admin.users')}}" class="nav-link">
                         <i class="nav-icon fa fa-users"></i>
                         <p>
                             Gestion Des Utilisateurs

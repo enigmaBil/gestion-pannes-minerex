@@ -10,54 +10,6 @@ use Str;
 
 class PanneController extends Controller
 {
-    //exemple of create a simple user for test
-    // public function createUser(Request $request)
-    // {
-    //     // Valider les données d'entrée
-    //     $validated = $request->validate([
-    //         'first_name' => 'required|string',
-    //         'last_name' => 'required|string',
-    //         'email' => 'required|email|unique:users,email', // vérifier si l'email est unique
-    //         'phone' => 'required|string',
-    //         'departement' => 'required|string',
-    //     ]);
-
-    //     // Générer un mot de passe aléatoire
-    //     $password = Str::random(8);
-
-    //     try {
-    //         // Créer l'utilisateur
-    //         $user = User::create([
-    //             'first_name' => $validated['first_name'],
-    //             'last_name' => $validated['last_name'],
-    //             'email' => $validated['email'],
-    //             'phone' => $validated['phone'],
-    //             'departement' => $validated['departement'],
-    //             'password' => $password, // Hacher le mot de passe
-    //         ]);
-
-    //         // Réponse JSON en cas de succès
-    //         return response()->json([
-    //             'success' => true,
-    //             'message' => 'User created successfully.',
-    //             'data' => [
-    //                 'first_name' => $user->first_name,
-    //                 'last_name' => $user->last_name,
-    //                 'email' => $user->email,
-    //                 'departement' => $user->departement,
-    //             ],
-    //             'password' => $password // Vous pouvez retourner le mot de passe temporaire si nécessaire
-    //         ], 201);
-    //     } catch (\Exception $e) {
-    //         // Réponse JSON en cas d'erreur
-    //         return response()->json([
-    //             'success' => false,
-    //             'message' => 'User creation failed.',
-    //             'error' => $e->getMessage(),
-    //         ], 500);
-    //     }
-    // }
-    //get create view
     public function index()
     {
         $users = User::all();
@@ -82,7 +34,8 @@ class PanneController extends Controller
             Log::info('Panne created successfully.', $validated);
 
             return redirect()->route('panne.create')->with('success', 'La Panne a été créée avec succès.');
-        } catch (\Illuminate\Validation\ValidationException $e) {
+        }
+        catch (\Illuminate\Validation\ValidationException $e) {
             // Log les erreurs de validation
             Log::error('Validation failed for creating panne.', [
                 'errors' => $e->errors(),
@@ -91,7 +44,8 @@ class PanneController extends Controller
 
             // Réafficher le formulaire avec les erreurs
             return redirect()->back()->withErrors($e->errors())->withInput();
-        } catch (\Exception $e) {
+        }
+        catch (\Exception $e) {
             // Log toutes les autres exceptions
             Log::error('Failed to create panne.', [
                 'message' => $e->getMessage(),

@@ -19,12 +19,20 @@ use Illuminate\Support\Facades\Route;
 // Routes pour la partie administration
 Route::middleware(['auth', 'roles:Admin,Lead_Technician,Technician'])->group(function (){
     Route::get('/admin/index', [\App\Http\Controllers\Admin\AdminController::class, 'index'])->name('admin.dashboard');
+    Route::get('/admin/panne/create', [PanneController::class, 'index'])->name('create.panne');
+    Route::post('/admin/panne/create', [PanneController::class, 'createPanne'])->name('store.panne');
+    Route::get('/admin/panne/index', [PanneController::class, 'listview'])->name('list.panne');
 
+    Route::get('admin/user/index', [\App\Http\Controllers\Admin\AdminController::class, 'getAllUsers'])->name('admin.users');
+    Route::get('/admin/technician/create', [\App\Http\Controllers\Admin\AdminController::class, 'create'])->name('technician.create');
+    Route::post('/admin/technician/store', [\App\Http\Controllers\Admin\AdminController::class, 'store'])->name('technician.store');
+    Route::get('/admin/lead-technician/create', [\App\Http\Controllers\Admin\AdminController::class, 'createLeadTech'])->name('lead.technician.create');
+    Route::post('/admin/lead-technician/create', [\App\Http\Controllers\Admin\AdminController::class, 'storeLeadTech'])->name('lead.technician.store');
 });
 
 //Routes pour la partie employe
 Route::middleware(['auth', 'roles:Employee'])->group(function (){
-    Route::get('/employee/index', [\App\Http\Controllers\Employee\EmployeeController::class, 'index'])->name('`employee.dashboard`');
+    Route::get('/employee/index', [\App\Http\Controllers\Employee\EmployeeController::class, 'index'])->name('employee.dashboard');
     Route::get('/employee/panne/index', [\App\Http\Controllers\Employee\EmployeeController::class, 'getAllPannes'])->name('panne.index');
     Route::get('/employee/panne/create', [\App\Http\Controllers\Employee\EmployeeController::class, 'create'])->name('panne.create');
     Route::post('/employee/panne/store', [\App\Http\Controllers\Employee\EmployeeController::class, 'store'])->name('panne.store');
@@ -52,9 +60,7 @@ Route::middleware('auth')->group(function () {
 Route::prefix('panne')->group(function () {
     //create test user
     // Route::post('/user', [PanneController::class, 'createUser'])->name('panne.user');
-    Route::get('/create', [PanneController::class, 'index'])->name('panne.create');
-    Route::post('/create', [PanneController::class, 'createPanne'])->name('panne.store');
-    Route::get('/list', [PanneController::class, 'listview'])->name('panne.list');
+
 });
 
 require __DIR__.'/auth.php';
