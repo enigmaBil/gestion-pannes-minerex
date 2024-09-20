@@ -49,7 +49,7 @@
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
-                        <form method="POST" action="{{ route('technician.store') }}">
+                        <form id="createTEchnicianForm" method="POST" action="{{ route('technician.store') }}">
                             @csrf
                             <!-- Row for Type and User -->
                             <div class="row">
@@ -57,32 +57,50 @@
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="user" class="form-label">Utilisateur</label>
-                                        <select class="form-control" name="user_id">
-                                            <option selected>Choisir un utilisateur</option>
+                                        <select id="user_id" class="form-control @error('user_id') is-invalid @enderror" name="user_id">
+                                            <option  disabled>Choisir un utilisateur</option>
                                             @foreach ($users as $user)
                                                 @if($user->hasRole('Employee'))
-                                                    <option value="{{ $user->id }}">{{ $user->last_name }}
+                                                    <option selected value="{{ $user->id }}">{{ $user->last_name }}
                                                         {{ $user->first_name }}
                                                     </option>
                                                 @endif
 
                                             @endforeach
                                         </select>
+                                        @error('user_id')
+                                        <span id="user_error" class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                        @enderror
+                                        <span id="user_error" class="invalid-feedback" role="alert"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="speciality" class="form-label">Spécialité</label>
-                                        <input type="text" class="form-control" id="speciality" name="speciality" placeholder="Entrer la specialite du technicien">
+                                        <input type="text" class="form-control @error('speciality') is-invalid @enderror" id="speciality" name="speciality" placeholder="Entrer la specialite du technicien">
                                     </div>
+                                    @error('speciality')
+                                    <span id="speciality_error" class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                    <span id="speciality_error" class="invalid-feedback" role="alert"></span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="grade" class="form-label">Grade</label>
-                                        <input type="text" class="form-control" id="grade" name="grade" placeholder="Entrer le grade du technicien">
+                                        <input type="text" class="form-control @error('grade') is-invalid @enderror" id="grade" name="grade" placeholder="Entrer le grade du technicien">
                                     </div>
+                                    @error('grade')
+                                    <span id="grade_error" class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                    <span id="grade_error" class="invalid-feedback" role="alert"></span>
                                 </div>
                             </div>
                             <!-- Submit Button -->
@@ -101,4 +119,60 @@
         </section>
         <!-- /.content -->
     </div>
+@endsection
+@section('js')
+    <script>
+        $(document).ready(function() {
+            $('#createTEchnicianForm').on('submit', function(event) {
+                console.log('Événement de soumission intercepté');
+                // Empêche la soumission par défaut
+                event.preventDefault();
+
+                // Validation du formulaire
+                if (validateForm()) {
+                    // Soumettre le formulaire si tout est correct
+                    this.submit();
+                }
+            });
+
+            function validateForm() {
+                let valid = true;
+                // Clear previous errors and classes
+                $('.invalid-feedback').html('');
+                $('.form-control').removeClass('is-invalid').removeClass('is-valid');
+
+                // Validate user
+                const userId = $('#user_id').val();
+                if (userId === '') {
+                    $('#user_error').html('Le choix de l\'employe est obligatoire.');
+                    $('#user_id').addClass('is-invalid'); // Ajoute la classe is-invalid
+                    valid = false;
+                } else {
+                    $('#user_id').addClass('is-valid'); // Ajoute la classe is-valid
+                }
+
+                // Validate speciality
+                const speciality = $('#speciality').val();
+                if (speciality === '') {
+                    $('#speciality_error').html('Ce champ est obligatoire');
+                    $('#speciality').addClass('is-invalid'); // Ajoute la classe is-invalid
+                    valid = false;
+                } else {
+                    $('#speciality').addClass('is-valid'); // Ajoute la classe is-valid
+                }
+
+                // Validate speciality
+                const grade = $('#grade').val();
+                if (speciality === '') {
+                    $('#grade_error').html('Ce champ est obligatoire');
+                    $('#grade').addClass('is-invalid'); // Ajoute la classe is-invalid
+                    valid = false;
+                } else {
+                    $('#grade').addClass('is-valid'); // Ajoute la classe is-valid
+                }
+
+                return valid;
+            }
+        });
+    </script>
 @endsection

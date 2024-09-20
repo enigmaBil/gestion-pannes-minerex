@@ -57,14 +57,12 @@
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="user" class="form-label">Utilisateur</label>
-                                        <select class="form-control" name="user_id">
-                                            <option selected>Choisir un utilisateur</option>
-                                            @foreach ($users as $user)
-                                                @if(!$user->hasRole('Employee'))
-                                                    <option value="{{ $user->id }}">{{ $user->last_name }}
-                                                        {{ $user->first_name }}
-                                                    </option>
-                                                @endif
+                                        <select class="form-control" name="technician_id" id="user_id" onchange="updateTechnicianFields()">
+                                            <option selected value="">Choisir un utilisateur</option>
+                                            @foreach ($techniciens as $technicien)
+                                                <option  value="{{ $technicien->id }}">{{ $technicien->user->last_name }}
+                                                    {{ $technicien->user->first_name }}
+                                                </option>
 
                                             @endforeach
                                         </select>
@@ -73,7 +71,7 @@
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="speciality" class="form-label">Spécialité</label>
-                                        <input type="text" class="form-control" id="speciality" name="speciality" placeholder="Entrer la specialite du technicien">
+                                        <input type="text" class="form-control" id="speciality" name="speciality" value="">
                                     </div>
                                 </div>
                             </div>
@@ -81,7 +79,7 @@
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="grade" class="form-label">Grade</label>
-                                        <input type="text" class="form-control" id="grade" name="grade" placeholder="Entrer le grade du technicien">
+                                        <input type="text" class="form-control" id="grade" name="grade" value="">
                                     </div>
                                 </div>
                             </div>
@@ -101,4 +99,25 @@
         </section>
         <!-- /.content -->
     </div>
+@endsection
+
+@section('js')
+    <script>
+        function updateTechnicianFields() {
+            let userId = $('#user_id').val();
+            let technicianData = @json($techniciens);
+            console.log(technicianData);
+            let selectedTechnician = technicianData.find(function(tech) {
+                return tech.id == userId;
+            });
+            console.log(selectedTechnician);
+            if (selectedTechnician) {
+                $('#speciality').val(selectedTechnician.speciality);
+                $('#grade').val(selectedTechnician.grade);
+            } else {
+                $('#speciality').val('');
+                $('#grade').val('');
+            }
+        }
+    </script>
 @endsection

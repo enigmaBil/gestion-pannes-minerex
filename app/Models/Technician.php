@@ -5,16 +5,25 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Technician extends User
+class Technician extends Model
 {
     use HasFactory;
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
+    protected $table = 'technicians'; // Nom de la table correcte
+
     protected $fillable = [
         'speciality',
-        'grade'
+        'grade',
+        'user_id', // Ajoutez l'ID utilisateur
     ];
+
+    // Relation avec le modèle User
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+    // Relation avec le modèle Role
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'role_user', 'user_id', 'role_id');
+    }
 }

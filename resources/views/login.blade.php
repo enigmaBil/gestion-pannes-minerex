@@ -52,23 +52,35 @@
         <div class="card-body login-card-body">
             <h3 class="login-box-msg">Connectez-Vous</h3>
 
-            <form action="{{route('login')}}" method="POST">
+            <form id="loginForm" action="{{route('login')}}" method="POST">
                 @csrf
                 <div class="input-group mb-3">
-                    <input type="email" name="email" value="{{ old('email') }}" required autofocus class="form-control" placeholder="Votre adresse email">
+                    <input type="email" name="email" id="email" value="{{ old('email') }}"  autofocus class="form-control @error('email') is-invalid @enderror" placeholder="Votre adresse email">
                     <div class="input-group-append">
                         <div class="input-group-text">
                             <span class="fas fa-envelope"></span>
                         </div>
                     </div>
+                    @error('email')
+                    <span id="email_error" class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                    @enderror
+                    <span id="email_error" class="invalid-feedback" role="alert"></span>
                 </div>
                 <div class="input-group mb-3">
-                    <input type="password" name="password" class="form-control" placeholder="Votre mot de passe">
+                    <input type="password" name="password" id="password" class="form-control @error('password') is-invalid @enderror" placeholder="Votre mot de passe">
                     <div class="input-group-append">
                         <div class="input-group-text">
                             <span class="fas fa-lock"></span>
                         </div>
                     </div>
+                    @error('password')
+                    <span id="password_error" class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                    @enderror
+                    <span id="password_error" class="invalid-feedback" role="alert"></span>
                 </div>
                 <div class="row mb-3">
                     <div class="col-8">
@@ -79,13 +91,11 @@
                             </label>
                         </div>
                     </div>
-                    <!-- /.col -->
                 </div>
                 <div class="row mb-3">
                     <div class="col-12">
                         <button type="submit" class="btn btn-success btn-block">Connexion</button>
                     </div>
-                    <!-- /.col -->
                 </div>
             </form>
 
@@ -118,5 +128,51 @@
 <script src="{{asset('backend/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
 <!-- AdminLTE App -->
 <script src="{{asset('backend/dist/js/adminlte.min.js')}}"></script>
+<script>
+    $(document).ready(function() {
+        $('#loginForm').on('submit', function(event) {
+            console.log('Événement de soumission intercepté');
+            // Empêche la soumission par défaut
+            event.preventDefault();
+
+            // Validation du formulaire
+            if (validateForm()) {
+                // Soumettre le formulaire si tout est correct
+                this.submit();
+            }
+        });
+
+        function validateForm() {
+            let valid = true;
+            // Clear previous errors and classes
+            $('.invalid-feedback').html('');
+            $('.form-control').removeClass('is-invalid').removeClass('is-valid');
+
+            // Validate email
+            const email = $('#email').val();
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                $('#email_error').html('Adresse email invalide');
+                $('#email').addClass('is-invalid'); // Ajoute la classe is-invalid
+                valid = false;
+            } else {
+                $('#email').addClass('is-valid'); // Ajoute la classe is-valid
+            }
+
+            // Validate password
+            const password = $('#password').val();
+            if (password.length < 8) {
+                $('#password_error').html('Le mot de passe doit contenir au moins 8 caractères');
+                $('#password').addClass('is-invalid'); // Ajoute la classe is-invalid
+                valid = false;
+            } else {
+                $('#password').addClass('is-valid'); // Ajoute la classe is-valid
+            }
+
+            return valid;
+        }
+    });
+</script>
+
 </body>
 </html>
