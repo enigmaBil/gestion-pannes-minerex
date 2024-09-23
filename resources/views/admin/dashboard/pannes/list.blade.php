@@ -51,55 +51,48 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($pannes as $panne)
-                                            <tr>
-                                                <td>{{ $panne->user->last_name }} {{ $panne->user->first_name }} </td>
-                                                <td>{{ Str::limit($panne->name, 10, ' ...') }}</td>
-                                                <td>{{ Str::limit($panne->description, 20, ' ...') }}</td>
-                                                <td>{{ $panne->type }}</td>
-                                                <td>{{ $panne->reporting_date }}</td>
-                                                <td>
-                                                    @if($panne->resolution_date !== null)
-                                                        {{ $panne->resolution_date}}
-                                                    @else
-                                                        <span class="badge badge-danger">Non résolue</span>
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    @if ($panne->status == 'en attente')
-                                                        <span class="badge badge-warning text-white">{{ $panne->status }}</span>
-                                                    @elseif($panne->status == 'en cours')
-                                                        <span class="badge badge-info">{{ $panne->status }}</span>
-                                                    @elseif($panne->status == 'résolue')
-                                                        <span class="badge badge-success">{{ $panne->status }}</span>
-                                                    @endif
+                                        @if($pannes === null)
+                                            <p>Aucune panne signalée pour le moment.</p>
+                                        @else
+                                            @foreach ($pannes as $panne)
+                                                <tr>
+                                                    <td>{{ $panne->user->last_name }} {{ $panne->user->first_name }} </td>
+                                                    <td>{{ Str::limit($panne->name, 10, ' ...') }}</td>
+                                                    <td>{{ Str::limit($panne->description, 20, ' ...') }}</td>
+                                                    <td>{{ $panne->type }}</td>
+                                                    <td>{{ $panne->reporting_date }}</td>
+                                                    <td>
+                                                        @if($panne->resolution_date !== null)
+                                                            {{ $panne->resolution_date}}
+                                                        @else
+                                                            <span class="badge badge-danger">Non résolue</span>
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        @if ($panne->status == 'en attente')
+                                                            <span class="badge badge-warning text-white">{{ $panne->status }}</span>
+                                                        @elseif($panne->status == 'en cours')
+                                                            <span class="badge badge-info">{{ $panne->status }}</span>
+                                                        @elseif($panne->status == 'résolue')
+                                                            <span class="badge badge-success">{{ $panne->status }}</span>
+                                                        @endif
 
-                                                </td>
-                                                <td>
-                                                    <a class="text-muted " href="">
-                                                        <i class="fas fa-pen fa-1x"></i>
-                                                    </a>
-                                                    <a class="text-muted mx-1" href="">
-                                                        <i class="fas fa-eye fa-1x"></i>
-                                                    </a>
-                                                    <a class="text-danger" href="">
-                                                        <i class="fas fa-trash fa-1x"></i>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        @endforeach
+                                                    </td>
+                                                    <td>
+                                                        <a class="text-muted " href="">
+                                                            <i class="fas fa-pen fa-1x"></i>
+                                                        </a>
+                                                        <a class="text-muted mx-1" href="">
+                                                            <i class="fas fa-eye fa-1x"></i>
+                                                        </a>
+                                                        <a class="text-danger" href="">
+                                                            <i class="fas fa-trash fa-1x"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        @endif
                                     </tbody>
-                                    {{-- <tfoot>
-                                        <tr>
-                                            <th>Utilisateur</th>
-                                            <th>Name</th>
-                                            <th>Browser</th>
-                                            <th>Type</th>
-                                            <th>Crée le</th>
-                                            <th>Resolut le</th>
-                                            <th>Status</th>
-                                        </tr>
-                                    </tfoot> --}}
                                 </table>
                             </div>
                             <!-- /.card-body -->

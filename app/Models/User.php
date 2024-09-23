@@ -63,10 +63,10 @@ class User extends Authenticatable
         return $this->hasMany(Intervention::class, 'technicien_id');
     }
 
-    public function notifications()
-    {
-        return $this->hasMany(Notification::class);
-    }
+//    public function notifications()
+//    {
+//        return $this->hasMany(Notification::class);
+//    }
 
     public function hasRole($role)
     {

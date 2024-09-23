@@ -53,7 +53,7 @@
 </head>
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed">
 <div class="wrapper">
-
+    @include('sweetalert::alert')
     <!-- Preloader -->
 {{--    <div class="preloader flex-column justify-content-center align-items-center">--}}
 {{--        <img class="animation__shake" src="{{asset('backend/dist/img/logo_minrex.png')}}" alt="Logo MINREX" height="100" width="100">--}}

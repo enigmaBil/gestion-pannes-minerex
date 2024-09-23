@@ -31,10 +31,15 @@
     <link rel="stylesheet" href="{{asset('backend/plugins/daterangepicker/daterangepicker.css')}}">
     <!-- summernote -->
     <link rel="stylesheet" href="{{asset('backend/plugins/summernote/summernote-bs4.min.css')}}">
+    <!-- data table-->
+    <link rel="stylesheet" href="{{ asset('backend/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('backend/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('backend/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
     @yield('css')
 </head>
 <body class="layout-top-nav layout-fixed layout-navbar-fixed">
 <div class="wrapper">
+    @include('sweetalert::alert')
 
     <!-- Preloader -->
     {{--    <div class="preloader flex-column justify-content-center align-items-center">--}}
@@ -90,6 +95,14 @@
 <!-- daterangepicker -->
 <script src="{{asset('backend/plugins/moment/moment.min.js')}}"></script>
 <script src="{{asset('backend/plugins/daterangepicker/daterangepicker.js')}}"></script>
+<!--data table -->
+<script src="{{ asset('backend/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('backend/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+<script src="{{ asset('backend/plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
+<script src="{{ asset('backend/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
+<script src="{{ asset('backend/plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
+<script src="{{ asset('backend/plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
+<!-- Select2 -->
 <!-- Tempusdominus Bootstrap 4 -->
 <script src="{{asset('backend/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js')}}"></script>
 <!-- Summernote -->

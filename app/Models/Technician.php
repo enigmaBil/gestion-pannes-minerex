@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 
 class Technician extends Model
 {
-    use HasFactory;
+    use HasFactory, Notifiable;
+
     protected $table = 'technicians'; // Nom de la table correcte
 
     protected $fillable = [

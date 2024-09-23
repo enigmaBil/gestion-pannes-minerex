@@ -16,8 +16,16 @@ class AdminController extends Controller
 {
     public function index()
     {
+        $notificationCount = auth()->user()->unreadNotifications()->count();
+//        dd($notificationCount);
+        return view('admin.dashboard.admin', compact('notificationCount'));
+    }
 
-        return view('admin.dashboard.admin');
+    public function showNotifications()
+    {
+        $notifications = auth()->user()->unreadNotifications;
+//        dd($notifications);
+        return view('admin.dashboard.notifications.index', compact('notifications'));
     }
 
     public function  create()
@@ -56,11 +64,11 @@ class AdminController extends Controller
             // Trouver l'utilisateur lié à ce technicien
             $user = User::find($technicienData['user_id']);
 
-//            // Détacher le rôle par défaut "Employee"
-//            $employeeRole = Role::where('name', 'Employee')->first();
-//            if ($employeeRole) {
-//                $user->roles()->detach($employeeRole->id);
-//            }
+            // Détacher le rôle par défaut "Employee"
+            $employeeRole = Role::where('name', 'Employee')->first();
+            if ($employeeRole) {
+                $user->roles()->detach($employeeRole->id);
+            }
 
             // Rechercher le rôle "Technician"
             $technicianRole = Role::where('name', 'Technician')->first();
@@ -112,41 +120,51 @@ class AdminController extends Controller
     {
         DB::beginTransaction();
         try {
-
             // Validation des données
-            $chefTechnicienData  = $request->validate([
-                'technician_id' => 'required|exists:technician,id', // Vérifier si le technicien existe
+            $chefTechnicienData = $request->validate([
+                'technician_id' => 'required|exists:technicians,id', // Correction du nom de la table
                 'speciality' => 'required|string',
                 'grade' => 'required|string',
             ]);
+//dd($chefTechnicienData);
+            // Vérifier si cet utilisateur est déjà un chef technicien
+            if (LeadTechnician::where('technician_id', $chefTechnicienData['technician_id'])->exists()) {
+                throw new Exception('Cet utilisateur est déjà un chef technicien.');
+            }
 
             // Créer un nouveau chef technicien
             $chefTechnicien = LeadTechnician::create($chefTechnicienData);
-            //dd($chefTechnicien);
-            // Détacher le rôle par défaut "Employee" et attacher le rôle "Lead_Technician"
-            $technician = Technician::findOrFail($chefTechnicienData['technician_id']);
-            $user = User::findOrFail($technician->user_id);
+//dd($chefTechnicien);
+            // Trouver l'utilisateur associé au technicien
+            $technician = Technician::findOrFail($chefTechnicien->technician_id);
+            $user = User::findOrFail($technician->user_id); // Vérifiez si `user_id` est la bonne relation
 
-//            $employeeRole = Role::where('name', 'Employee')->first();
-//            if ($employeeRole) {
-//                $user->roles()->detach($employeeRole->id);
-//            }
-
+            // Détacher le rôle "Technician" et attacher le rôle "Lead_Technician"
+            $technicianRole = Role::where('name', 'Technician')->first();
             $leadTechnicianRole = Role::where('name', 'Lead_Technician')->first();
-            if ($leadTechnicianRole) {
-                $user->roles()->attach($leadTechnicianRole->id);
+
+            if ($technicianRole && $user->roles()->detach($technicianRole->id)) {
+                if ($leadTechnicianRole) {
+                    $user->roles()->attach($leadTechnicianRole->id);
+                } else {
+                    throw new Exception('Rôle Lead_Technician non trouvé.');
+                }
+            } else {
+                throw new Exception('Rôle Technician non trouvé ou détachement échoué.');
             }
 
             DB::commit();
+            alert()->success('Chef technicien créé','Le Chef technicien a été créé avec succès.');
             return redirect()->route('admin.users')->with('success', 'Le Chef technicien a été créé avec succès.');
         } catch (\Illuminate\Validation\ValidationException $e) {
             DB::rollBack();
             return redirect()->back()->withErrors($e->errors())->withInput();
         } catch (Exception $e) {
             DB::rollBack();
-            return redirect()->back()->with('error', 'Échec de création du chef technicien. Veuillez réessayer plus tard.');
+            return redirect()->back()->with('error', $e->getMessage() ?: 'Échec de création du chef technicien. Veuillez réessayer plus tard.');
         }
     }
+
 
 
 

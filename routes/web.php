@@ -27,7 +27,9 @@ Route::middleware(['auth', 'roles:Admin,Lead_Technician,Technician'])->group(fun
     Route::get('/admin/technician/create', [\App\Http\Controllers\Admin\AdminController::class, 'create'])->name('technician.create');
     Route::post('/admin/technician/store', [\App\Http\Controllers\Admin\AdminController::class, 'store'])->name('technician.store');
     Route::get('/admin/lead-technician/create', [\App\Http\Controllers\Admin\AdminController::class, 'createLeadTech'])->name('lead.technician.create');
-    Route::post('/admin/lead-technician/create', [\App\Http\Controllers\Admin\AdminController::class, 'storeLeadTechnician'])->name('lead.technician.store');
+    Route::post('/admin/lead-technician/store', [\App\Http\Controllers\Admin\AdminController::class, 'storeLeadTechnician'])->name('lead.technician.store');
+
+    Route::get('/admin/notifs', [\App\Http\Controllers\Admin\AdminController::class, 'showNotifications'])->name('notif.index');
 });
 
 //Routes pour la partie employe
