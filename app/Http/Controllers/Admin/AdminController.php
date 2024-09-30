@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Log;
 
 class AdminController extends Controller
 {
+
     public function index()
     {
         $notificationCount = auth()->user()->unreadNotifications()->count();

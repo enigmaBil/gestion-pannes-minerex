@@ -79,15 +79,19 @@
 
                                                     </td>
                                                     <td>
-                                                        <a class="text-muted " href="">
-                                                            <i class="fas fa-pen fa-1x"></i>
-                                                        </a>
-                                                        <a class="text-muted mx-1" href="">
+                                                        <a class="text-muted" style="font-size: 12px" href="{{ route('show.panne', $panne->id) }}">
                                                             <i class="fas fa-eye fa-1x"></i>
                                                         </a>
-                                                        <a class="text-danger" href="">
-                                                            <i class="fas fa-trash fa-1x"></i>
+                                                        <a class="text-primary mx-1" style="font-size: 12px" href="{{ route('edit.panne', $panne->id) }}">
+                                                            <i class="fas fa-pen fa-1x"></i>
                                                         </a>
+                                                        <form action="{{ route('delete.panne', $panne->id) }}" method="POST" style="display:inline;">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" style="font-size: 12px" class="text-danger border-0 bg-transparent" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette panne ?')">
+                                                                <i class="fas fa-trash fa-1x"></i>
+                                                            </button>
+                                                        </form>
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -120,12 +124,16 @@
             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
             $('#example2').DataTable({
                 "paging": true,
+                "pageLength":5,
                 "lengthChange": false,
-                "searching": false,
+                "searching": true,
                 "ordering": true,
                 "info": true,
                 "autoWidth": false,
                 "responsive": true,
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.25/i18n/French.json"
+                }
             });
         });
     </script>

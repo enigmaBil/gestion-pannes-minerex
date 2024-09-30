@@ -35,7 +35,7 @@
                 <!-- Add icons to the links using the .nav-icon class
                      with font-awesome or any other icon font library -->
                 <li class="nav-item">
-                    <a href="{{route('dashboard')}}" class="nav-link active">
+                    <a href="{{route('dashboard')}}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>
                             Dashboard
@@ -43,7 +43,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link ">
+                    <a href="#" class="nav-link {{ request()->routeIs('list.panne') ? 'active' : '' }}">
                         <i class="nav-icon fa fa-bug"></i>
                         <p>
                             Gestion Des Pannes
@@ -52,13 +52,13 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ route('list.panne') }}" class="nav-link active">
+                            <a href="{{ route('list.panne') }}" class="nav-link {{ request()->routeIs('list.panne') ? 'active' : '' }}">
                                 <i class="fa fa-list nav-icon"></i>
                                 <p>Consulter Les Pannes</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('create.panne') }}" class="nav-link ">
+                            <a href="{{ route('create.panne') }}" class="nav-link {{ request()->routeIs('create.panne') ? 'active' : '' }}">
                                 <i class="fa fa-bug nav-icon"></i>
                                 <p>Signaler Une Panne</p>
                             </a>
@@ -89,14 +89,26 @@
                         </li>
                     </ul>
                 </li>
+                @if (Auth::user()->hasRole('Admin')||Auth::user()->hasRole('Lead_Technician'))
+                    <li class="nav-item">
+                        <a href="{{route('stock.index')}}" class="nav-link {{ request()->routeIs('stock.index') ? 'active' : '' }}">
+                            <i class="nav-icon fa fa-weight-hanging"></i>
+                            <p>
+                                Gestion De Stocks
+                            </p>
+                        </a>
+                    </li>
+                @endif
+                @if (Auth::user()->hasRole('Admin'))
                 <li class="nav-item">
-                    <a href="{{route('admin.users')}}" class="nav-link">
+                    <a href="{{route('admin.users')}}" class="nav-link {{ request()->routeIs('admin.users') ? 'active' : '' }}">
                         <i class="nav-icon fa fa-users"></i>
                         <p>
                             Gestion Des Utilisateurs
                         </p>
                     </a>
                 </li>
+                @endif
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

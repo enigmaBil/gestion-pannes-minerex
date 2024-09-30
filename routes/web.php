@@ -22,6 +22,11 @@ Route::middleware(['auth', 'roles:Admin,Lead_Technician,Technician'])->group(fun
     Route::get('/admin/panne/create', [PanneController::class, 'index'])->name('create.panne');
     Route::post('/admin/panne/create', [PanneController::class, 'createPanne'])->name('store.panne');
     Route::get('/admin/panne/index', [PanneController::class, 'listview'])->name('list.panne');
+    Route::get('/admin/panne/show/{id}', [PanneController::class, 'show'])->name('show.panne');
+    Route::get('/admin/panne/edit/{id}', [PanneController::class, 'edit'])->name('edit.panne');
+    Route::put('/admin/panne/update/{id}', [PanneController::class, 'update'])->name('update.panne');
+    Route::delete('/admin/panne/delete/{id}', [PanneController::class, 'destroy'])->name('delete.panne');
+
 
     Route::get('admin/user/index', [\App\Http\Controllers\Admin\AdminController::class, 'getAllUsers'])->name('admin.users');
     Route::get('/admin/technician/create', [\App\Http\Controllers\Admin\AdminController::class, 'create'])->name('technician.create');
@@ -30,6 +35,17 @@ Route::middleware(['auth', 'roles:Admin,Lead_Technician,Technician'])->group(fun
     Route::post('/admin/lead-technician/store', [\App\Http\Controllers\Admin\AdminController::class, 'storeLeadTechnician'])->name('lead.technician.store');
 
     Route::get('/admin/notifs', [\App\Http\Controllers\Admin\AdminController::class, 'showNotifications'])->name('notif.index');
+
+    Route::get('/stock/index', [\App\Http\Controllers\Stock\StockController::class, 'index'])->name('stock.index');
+    Route::get('/stock/create', [\App\Http\Controllers\Stock\StockController::class, 'create'])->name('stock.create');
+    Route::get('/stock/edit/{id}', [\App\Http\Controllers\Stock\StockController::class, 'edit'])->name('stock.edit');
+    Route::put('/stock/update/{id}', [\App\Http\Controllers\Stock\StockController::class, 'update'])->name('stock.update');
+    Route::post('/stock/store', [\App\Http\Controllers\Stock\StockController::class, 'store'])->name('stock.store');
+    Route::get('/stock/show/{id}', [\App\Http\Controllers\Stock\StockController::class, 'index'])->name('stock.show');
+    Route::delete('/stock/delete/{id}', [\App\Http\Controllers\Stock\StockController::class, 'destroy'])->name('stock.delete');
+
+    // Route pour l'export PDF des stocks
+    Route::get('stocks/export/pdf', [\App\Http\Controllers\Stock\StockController::class, 'exportPdf'])->name('stock.export.pdf');
 });
 
 //Routes pour la partie employe
