@@ -53,6 +53,9 @@
                                         <b>Direction</b> <span class="float-right">{{Auth::user()->departement?Auth::user()->departement:'Non definie'}}</span>
                                     </li>
                                     <li class="list-group-item">
+                                        <b>Numero de porte</b> <span class="float-right">{{Auth::user()->porte}}</span>
+                                    </li>
+                                    <li class="list-group-item">
                                         <b>Telephone</b> <span class="float-right">{{Auth::user()->phone}}</span>
                                     </li>
                                     <li class="list-group-item">
@@ -113,10 +116,18 @@
                                                 </div>
                                             </div>
                                             <div class="input-group mb-2">
-                                                <input type="text" name="departement" value="{{ Auth::user()->departement }}" class="form-control" required placeholder="Votre Nom">
+                                                <input type="text" name="departement" value="{{ Auth::user()->departement }}" class="form-control" required placeholder="Votre Direction">
                                                 <div class="input-group-append">
                                                     <div class="input-group-text">
-                                                        <span class="fas fa-user"></span>
+                                                        <span class="fas fa-building"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="input-group mb-2">
+                                                <input type="text" name="porte" value="{{ Auth::user()->porte }}" class="form-control" required placeholder="Numero de la porte">
+                                                <div class="input-group-append">
+                                                    <div class="input-group-text">
+                                                        <span class="fas fa-door-closed"></span>
                                                     </div>
                                                 </div>
                                             </div>

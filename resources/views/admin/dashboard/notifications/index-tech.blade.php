@@ -35,7 +35,7 @@
 
                                             <li class="list-group-item">
                                                 <a href="{{route('notif.show', $notification->id)}}" class=" text-bold" style="color: #818182!important;">
-                                                    {{ $notification->data['name'] }}
+                                                    {{ $notification->data['titre'] }}
                                                 </a>
                                                 <span class="float-right">
 {{--                                                    <a title="Marquer comme lu" href="#" >--}}

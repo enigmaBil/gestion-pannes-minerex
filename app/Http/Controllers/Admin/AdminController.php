@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\LeadTechnician;
+use App\Models\Panne;
 use App\Models\Role;
 use App\Models\Technician;
 use App\Models\User;
@@ -22,11 +23,40 @@ class AdminController extends Controller
         return view('admin.dashboard.admin', compact('notificationCount'));
     }
 
-    public function showNotifications()
+    public function indexNotifications()
     {
         $notifications = auth()->user()->unreadNotifications;
+        $user = auth()->user();
+//                dd($notifications);
+        if ($user->hasRole('Technician')){
+            return view('admin.dashboard.notifications.index-tech', compact('notifications'));
+        }
 //        dd($notifications);
         return view('admin.dashboard.notifications.index', compact('notifications'));
+    }
+
+    public function showNotification($id)
+    {
+        // Récupérer la notification spécifique appartenant à l'utilisateur
+        $notification = auth()->user()->notifications()->findOrFail($id);
+        $panne = Panne::findOrFail($notification->data['panne_id']);
+        $users = User::all();
+//        dd($panne);
+        $user = auth()->user();
+//                dd($notification);
+        if ($user->hasRole('Technician')){
+            // Si la notification est non lue, la marquer comme lue
+            if ($notification->unread()) {
+                $notification->markAsRead();
+            }
+            return view('admin.dashboard.notifications.show-tech', compact('notification', 'panne', 'users'));
+        }
+        // Si la notification est non lue, la marquer comme lue
+        if ($notification->unread()) {
+            $notification->markAsRead();
+        }
+
+        return view('admin.dashboard.notifications.show', compact('notification', 'panne', 'users'));
     }
 
     public function  create()

@@ -34,7 +34,9 @@ Route::middleware(['auth', 'roles:Admin,Lead_Technician,Technician'])->group(fun
     Route::get('/admin/lead-technician/create', [\App\Http\Controllers\Admin\AdminController::class, 'createLeadTech'])->name('lead.technician.create');
     Route::post('/admin/lead-technician/store', [\App\Http\Controllers\Admin\AdminController::class, 'storeLeadTechnician'])->name('lead.technician.store');
 
-    Route::get('/admin/notifs', [\App\Http\Controllers\Admin\AdminController::class, 'showNotifications'])->name('notif.index');
+    Route::get('/admin/notifs', [\App\Http\Controllers\Admin\AdminController::class, 'indexNotifications'])->name('notif.index');
+    Route::get('/admin/notifs/show/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'showNotification'])->name('notif.show');
+    Route::post('/panne/{panne}/assign', [PanneController::class, 'assignTechnician'])->name('panne.assignTechnician');
 
     Route::get('/stock/index', [\App\Http\Controllers\Stock\StockController::class, 'index'])->name('stock.index');
     Route::get('/stock/create', [\App\Http\Controllers\Stock\StockController::class, 'create'])->name('stock.create');

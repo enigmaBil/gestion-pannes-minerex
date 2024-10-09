@@ -11,6 +11,7 @@ class Panne extends Model
 
     protected $fillable = [
         'name',
+        'code',
         'description',
         'type',
         'status',
@@ -20,7 +21,7 @@ class Panne extends Model
     ];
 
     public function user()
-    { 
+    {
         return $this->belongsTo(User::class);
     }
 

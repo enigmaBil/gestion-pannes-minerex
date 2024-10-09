@@ -29,7 +29,22 @@ class EmployeeController extends Controller
     {
         return view('employee.panne.create');
     }
+    private function generateCode(): string {
+        $longueur = 6; // 6 caractères après le #
+        $caracteres = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $code = '#';
 
+        // Générer les 6 caractères aléatoires
+        for ($i = 0; $i < $longueur; $i++) {
+            $code .= $caracteres[random_int(0, strlen($caracteres) - 1)];
+        }
+
+        // Ajouter la date du jour au format YYYYMMDD avec un trait d'union
+        $date = strtoupper(date('Ymd'));
+
+        // Retourner le code généré en majuscules suivi d'un trait d'union et de la date
+        return $code . '-' . $date;
+    }
     public function store(Request $request)
     {
         DB::beginTransaction();
@@ -45,6 +60,7 @@ class EmployeeController extends Controller
             // Créer une nouvelle panne
             $panne = Panne::create([
                 'name' => $validated['name'],
+                'code' => $this->generateCode(),
                 'description' => $validated['description'],
                 'type' => $validated['type'],
                 'status' => 'en attente',

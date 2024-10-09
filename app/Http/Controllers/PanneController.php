@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Panne;
 use App\Models\User;
+use App\Notifications\PanneAssigneeNotification;
+use App\Notifications\PanneSignalee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Str;
 
@@ -24,8 +27,28 @@ class PanneController extends Controller
         return view('admin.dashboard.pannes.create', compact('users'));
     }
 
+    private function generateCode(): string {
+        $longueur = 6; // 6 caractères après le #
+        $caracteres = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $code = '#';
+
+        // Générer les 6 caractères aléatoires
+        for ($i = 0; $i < $longueur; $i++) {
+            $code .= $caracteres[random_int(0, strlen($caracteres) - 1)];
+        }
+
+        // Ajouter la date du jour au format YYYYMMDD avec un trait d'union
+        $date = strtoupper(date('Ymd'));
+
+        // Retourner le code généré en majuscules suivi d'un trait d'union et de la date
+        return $code . '-' . $date;
+    }
+
+
+
     public function createPanne(Request $request)
     {
+        DB::beginTransaction();
         try {
             // Valider les données d'entrée
             $validated = $request->validate([
@@ -35,9 +58,13 @@ class PanneController extends Controller
                 'user_id' => 'required|exists:users,id', // vérifier si l'utilisateur existe
             ]);
 
-            // Créer une nouvelle panne
-            Panne::create($validated);
+            $validated['code' ] = $this->generateCode();
+//            dd($validated);
 
+            // Créer une nouvelle panne
+            $panne = Panne::create($validated);
+            \auth()->user()->notify(new PanneSignalee($panne, $request->all()));
+            DB::commit();
             // Log la création réussie
             Log::info('Panne created successfully.', $validated);
             alert()->success('Panne créée', 'La panne a été ajouté avec succès.');
@@ -65,6 +92,53 @@ class PanneController extends Controller
             return redirect()->back()->with('error', 'Failed to create panne. Please try again.');
         }
     }
+
+    public function assignTechnician(Request $request, Panne $panne)
+    {
+        DB::beginTransaction();
+        try {
+            // Valider les données
+            $request->validate([
+                'user_id' => 'required|exists:users,id',
+            ]);
+
+            // Assigner le technicien
+            $technician = User::findOrFail($request->user_id);
+//            $panne->user_id = $technician->id;
+            $panne->status = 'en attente'; // Vous pouvez ajuster le statut selon votre logique
+            $panne->save();
+
+            // Envoyer une notification au technicien
+            $technician->notify(new PanneAssigneeNotification($panne));
+            DB::commit();
+            alert()->success('Panne assignée','La Panne a été assignée avec succès à '. $technician->name . '.');
+
+            return redirect()->route('notif.index')->with('success', 'Panne assignée avec succès à ' . $technician->name . '.');
+
+        }catch (\Illuminate\Validation\ValidationException $e) {
+            DB::rollBack();
+            // Log les erreurs de validation
+            Log::error('Validation failed for creating panne.', [
+                'errors' => $e->errors(),
+                'input' => $request->all(),
+            ]);
+
+            // Réafficher le formulaire avec les erreurs
+            return redirect()->back()->withErrors($e->errors())->withInput();
+        }
+        catch (\Exception $e) {
+            DB::rollBack();
+            // Log toutes les autres exceptions
+            Log::error('Failed to create panne.', [
+                'message' => $e->getMessage(),
+                'input' => $request->all(),
+            ]);
+
+            // Réafficher le formulaire avec un message d'erreur générique
+            return redirect()->back()->with('error', 'Failed to create panne. Please try again.');
+        }
+    }
+
     //get list view
     public function listview()
     {
