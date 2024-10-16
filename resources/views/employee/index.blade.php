@@ -4,21 +4,6 @@
     <div class="content-wrapper mt-6">
 
         <div class="container ">
-{{--            <!-- Content Header (Page header) -->--}}
-{{--            <section class="content-header">--}}
-{{--                <div class="container-fluid">--}}
-{{--                    <div class="row mb-2">--}}
-{{--                        <div class="col-sm-6">--}}
-{{--                            <h1>Accueil</h1>--}}
-{{--                        </div>--}}
-{{--                        <div class="col-sm-6">--}}
-{{--                            <ol class="breadcrumb float-sm-right">--}}
-{{--                                <li class="breadcrumb-item active">Accueil</li>--}}
-{{--                            </ol>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                </div><!-- /.container-fluid -->--}}
-{{--            </section>--}}
             <div class="row mt-3">
                 <div class="col-md-8">
                     <div class="row mt-3">
@@ -104,18 +89,6 @@
                             </h3>
                             <!-- tools card -->
                             <div class="card-tools">
-{{--                                <!-- button with a dropdown -->--}}
-{{--                                <div class="btn-group">--}}
-{{--                                    <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown" data-offset="-52">--}}
-{{--                                        <i class="fas fa-bars"></i>--}}
-{{--                                    </button>--}}
-{{--                                    <div class="dropdown-menu" role="menu">--}}
-{{--                                        <a href="#" class="dropdown-item">Add new event</a>--}}
-{{--                                        <a href="#" class="dropdown-item">Clear events</a>--}}
-{{--                                        <div class="dropdown-divider"></div>--}}
-{{--                                        <a href="#" class="dropdown-item">View calendar</a>--}}
-{{--                                    </div>--}}
-{{--                                </div>--}}
                                 <button type="button" class="btn btn-success btn-sm" data-card-widget="collapse">
                                     <i class="fas fa-minus"></i>
                                 </button>
